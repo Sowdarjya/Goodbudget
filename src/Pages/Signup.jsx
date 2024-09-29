@@ -1,5 +1,8 @@
 import React from "react";
 import { useState } from "react";
+import { auth } from "../config/firebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { toast } from "react-toastify";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
@@ -7,6 +10,32 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [haveAnAccount, setHaveAnAccount] = useState(false);
+
+  const signUpWithEmailAndPassword = async (e) => {
+    e.preventDefault();
+    if (username && email && password && confirmPassword) {
+      if (password === confirmPassword) {
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            toast.success("User created");
+            setConfirmPassword("");
+            setEmail("");
+            setPassword("");
+            setUsername("");
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            toast.error(errorMessage);
+          });
+      } else {
+        toast.error("Password and confirm password do not match");
+      }
+    } else {
+      toast.error("All fields are mandatory");
+    }
+  };
 
   return (
     <div className="flex items-center justify-center h-[90vh]">
@@ -98,7 +127,10 @@ const Signup = () => {
               />
             </div>
             <div className="flex items-center justify-between">
-              <button className="bg-slate-900 p-1 w-1/2  text-white rounded-md hover:bg-slate-800">
+              <button
+                onClick={signUpWithEmailAndPassword}
+                className="bg-slate-900 p-1 w-1/2  text-white rounded-md hover:bg-slate-800"
+              >
                 SignUp
               </button>
               <p className="font-medium text-lg m-3">or</p>
