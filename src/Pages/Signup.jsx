@@ -10,7 +10,7 @@ const Signup = () => {
   return (
     <div className="flex items-center justify-center h-[90vh]">
       {haveAnAccount ? (
-        <div className="bg-[#12b3eb] w-[50%] rounded-lg p-6 h-2/4">
+        <div className="bg-[#12b3eb] w-[50%] rounded-lg p-6 h-[55%]">
           <h2 className="text-center text-3xl m-3">GoodBudget</h2>
 
           <form>
@@ -40,8 +40,8 @@ const Signup = () => {
                 LogIn
               </button>
             </div>
-            <p className="text-center">
-              DOn't have an account ?
+            <p className="text-center mt-2">
+              Don't have an account ?
               <span
                 onClick={() => setHaveAnAccount(!haveAnAccount)}
                 className="underline hover:text-slate-900 hover:cursor-pointer"
