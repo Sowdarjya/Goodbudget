@@ -1,7 +1,8 @@
 import React from "react";
+import Header from "./components/Header/Header";
 
 const App = () => {
-  return <div className="text-7xl font-extrabold">Hello</div>;
+  return <></>;
 };
 
 export default App;
