@@ -2,7 +2,10 @@ import React from "react";
 import { useState } from "react";
 import { auth } from "../config/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider } from "firebase/auth";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
@@ -10,6 +13,9 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [haveAnAccount, setHaveAnAccount] = useState(false);
+
+  const navigator = useNavigate();
+  const provider = new GoogleAuthProvider();
 
   const signUpWithEmailAndPassword = async (e) => {
     e.preventDefault();
@@ -23,9 +29,9 @@ const Signup = () => {
             setEmail("");
             setPassword("");
             setUsername("");
+            navigator("/dashboard");
           })
           .catch((error) => {
-            const errorCode = error.code;
             const errorMessage = error.message;
             toast.error(errorMessage);
           });
@@ -35,6 +41,23 @@ const Signup = () => {
     } else {
       toast.error("All fields are mandatory");
     }
+  };
+
+  const signUpWithGoogle = async (e) => {
+    e.preventDefault();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential.accessToken;
+        const user = result.user;
+        console.log(user);
+        toast.success("user created");
+        navigator("/dashboard");
+      })
+      .catch((error) => {
+        const errorMessage = error.message;
+        toast.error(errorMessage);
+      });
   };
 
   return (
@@ -134,7 +157,10 @@ const Signup = () => {
                 SignUp
               </button>
               <p className="font-medium text-lg m-3">or</p>
-              <button className="bg-slate-900 p-1 w-1/2 text-white rounded-md hover:bg-slate-800">
+              <button
+                onClick={signUpWithGoogle}
+                className="bg-slate-900 p-1 w-1/2 text-white rounded-md hover:bg-slate-800"
+              >
                 SignUp with Google
               </button>
             </div>
