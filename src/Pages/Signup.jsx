@@ -114,10 +114,17 @@ const Signup = () => {
 
             <div className="flex items-center justify-between">
               <button
-                className="bg-slate-900 p-1 w-full  text-white rounded-md hover:bg-slate-800"
+                className="bg-slate-900 p-1 w-1/2  text-white rounded-md hover:bg-slate-800"
                 onClick={logIn}
               >
                 LogIn
+              </button>
+              <p className="font-medium text-lg m-3">or</p>
+              <button
+                onClick={signUpWithGoogle}
+                className="bg-slate-900 p-1 w-1/2 text-white rounded-md hover:bg-slate-800"
+              >
+                LogIn with Google
               </button>
             </div>
             <p className="text-center mt-2">
