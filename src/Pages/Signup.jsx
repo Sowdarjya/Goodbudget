@@ -63,8 +63,10 @@ const Signup = () => {
   return (
     <div className="flex items-center justify-center h-[90vh]">
       {haveAnAccount ? (
-        <div className="bg-[#12b3eb] w-[50%] rounded-lg p-6 h-[55%]">
-          <h2 className="text-center text-3xl m-3">GoodBudget</h2>
+        <div className=" bg-[#d3d9d4] shadow-2xl shadow-[#212a31] w-[50%] rounded-lg p-6 h-[55%]">
+          <h2 className="text-center font-bold text-3xl m-3 text-[#212a31]">
+            GoodBudget
+          </h2>
 
           <form>
             <div className="mb-3">
@@ -105,8 +107,10 @@ const Signup = () => {
           </form>
         </div>
       ) : (
-        <div className="bg-[#12b3eb] w-[50%] rounded-lg p-6 h-5/6">
-          <h2 className="text-center text-3xl m-3">GoodBudget</h2>
+        <div className=" bg-[#d3d9d4] shadow-2xl shadow-[#212a31] w-[50%] rounded-lg p-6 h-5/6">
+          <h2 className="text-center font-bold text-3xl m-3 text-[#212a31]">
+            GoodBudget
+          </h2>
 
           <form>
             <div className="mb-3">
