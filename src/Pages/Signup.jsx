@@ -9,6 +9,7 @@ import { db } from "../config/firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Header from "../components/Header/Header";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
@@ -63,7 +64,6 @@ const Signup = () => {
         const token = credential.accessToken;
         const user = result.user;
         addToDb(user);
-        console.log(user);
         setLoading(false);
         toast.success("Authenticated");
         navigator("/dashboard");
@@ -106,142 +106,144 @@ const Signup = () => {
         Email: user.email,
         Photo: user.photoURL ? user.photoURL : null,
       });
-      toast.success("Doc created");
     } catch (error) {
       toast.error(error.message);
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-[90vh]">
-      {haveAnAccount ? (
-        <div className=" bg-[#d3d9d4] shadow-2xl shadow-[#212a31] w-[50%] rounded-lg p-6 h-[55%]">
-          <h2 className="text-center font-bold text-3xl m-3 text-[#212a31]">
-            GoodBudget
-          </h2>
+    <div>
+      <Header />
+      <div className="flex items-center justify-center h-[90vh]">
+        {haveAnAccount ? (
+          <div className=" bg-[#d3d9d4] shadow-2xl shadow-[#212a31] w-[50%] rounded-lg p-6 h-[55%]">
+            <h2 className="text-center font-bold text-3xl m-3 text-[#212a31]">
+              GoodBudget
+            </h2>
 
-          <form>
-            <div className="mb-3">
-              <p className="font-medium text-base">Email</p>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                className="bg-transparent outline-none placeholder:text-slate-600 w-full"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <p className="font-medium text-base">Password</p>
-              <input
-                type="password"
-                placeholder="Enter password"
-                value={password}
-                className="bg-transparent outline-none placeholder:text-slate-600 w-full"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
+            <form>
+              <div className="mb-3">
+                <p className="font-medium text-base">Email</p>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  className="bg-transparent outline-none placeholder:text-slate-600 w-full"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <p className="font-medium text-base">Password</p>
+                <input
+                  type="password"
+                  placeholder="Enter password"
+                  value={password}
+                  className="bg-transparent outline-none placeholder:text-slate-600 w-full"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
 
-            <div className="flex items-center justify-between">
-              <button
-                className="bg-slate-900 p-1 w-1/2  text-white rounded-md hover:bg-slate-800"
-                onClick={logIn}
-              >
-                {loading ? "Loading" : "LogIn"}
-              </button>
-              <p className="font-medium text-lg m-3">or</p>
-              <button
-                onClick={signUpWithGoogle}
-                className="bg-slate-900 p-1 w-1/2 text-white rounded-md hover:bg-slate-800"
-              >
-                {loading ? "Loading" : "LogIn with Google"}
-              </button>
-            </div>
-            <p className="text-center mt-2">
-              Don't have an account ?
-              <span
-                onClick={() => setHaveAnAccount(!haveAnAccount)}
-                className="underline hover:text-slate-900 hover:cursor-pointer"
-              >
-                Click Here
-              </span>
-            </p>
-          </form>
-        </div>
-      ) : (
-        <div className=" bg-[#d3d9d4] shadow-2xl shadow-[#212a31] w-[50%] rounded-lg p-6 h-5/6">
-          <h2 className="text-center font-bold text-3xl m-3 text-[#212a31]">
-            GoodBudget
-          </h2>
+              <div className="flex items-center justify-between">
+                <button
+                  className="bg-slate-900 p-1 w-1/2  text-white rounded-md hover:bg-slate-800"
+                  onClick={logIn}
+                >
+                  {loading ? "Loading" : "LogIn"}
+                </button>
+                <p className="font-medium text-lg m-3">or</p>
+                <button
+                  onClick={signUpWithGoogle}
+                  className="bg-slate-900 p-1 w-1/2 text-white rounded-md hover:bg-slate-800"
+                >
+                  {loading ? "Loading" : "LogIn with Google"}
+                </button>
+              </div>
+              <p className="text-center mt-2">
+                Don't have an account ?
+                <span
+                  onClick={() => setHaveAnAccount(!haveAnAccount)}
+                  className="underline hover:text-slate-900 hover:cursor-pointer"
+                >
+                  Click Here
+                </span>
+              </p>
+            </form>
+          </div>
+        ) : (
+          <div className=" bg-[#d3d9d4] shadow-2xl shadow-[#212a31] w-[50%] rounded-lg p-6 h-5/6">
+            <h2 className="text-center font-bold text-3xl m-3 text-[#212a31]">
+              GoodBudget
+            </h2>
 
-          <form>
-            <div className="mb-3">
-              <p className="font-medium text-base">Username</p>
-              <input
-                type="text"
-                placeholder="Enter username"
-                value={username}
-                className="bg-transparent outline-none placeholder:text-slate-600 w-full"
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <p className="font-medium text-base">Email</p>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                className="bg-transparent outline-none placeholder:text-slate-600 w-full"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <p className="font-medium text-base">Password</p>
-              <input
-                type="password"
-                placeholder="Enter password"
-                value={password}
-                className="bg-transparent outline-none placeholder:text-slate-600 w-full"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <div className="mb-3">
-              <p className="font-medium text-base ">Confirm password</p>
-              <input
-                type="password"
-                placeholder="Enter password again"
-                value={confirmPassword}
-                className="bg-transparent outline-none placeholder:text-slate-600 w-full"
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <button
-                onClick={signUpWithEmailAndPassword}
-                className="bg-slate-900 p-1 w-1/2  text-white rounded-md hover:bg-slate-800"
-              >
-                {loading ? "Loading" : "Signup"}
-              </button>
-              <p className="font-medium text-lg m-3">or</p>
-              <button
-                onClick={signUpWithGoogle}
-                className="bg-slate-900 p-1 w-1/2 text-white rounded-md hover:bg-slate-800"
-              >
-                {loading ? "Loading" : "SignUp with Google"}
-              </button>
-            </div>
-            <p className="text-center">
-              Already have an account ?{" "}
-              <span
-                onClick={() => setHaveAnAccount(!haveAnAccount)}
-                className="underline hover:text-slate-900 hover:cursor-pointer"
-              >
-                Click Here
-              </span>
-            </p>
-          </form>
-        </div>
-      )}
+            <form>
+              <div className="mb-3">
+                <p className="font-medium text-base">Username</p>
+                <input
+                  type="text"
+                  placeholder="Enter username"
+                  value={username}
+                  className="bg-transparent outline-none placeholder:text-slate-600 w-full"
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <p className="font-medium text-base">Email</p>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  className="bg-transparent outline-none placeholder:text-slate-600 w-full"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <p className="font-medium text-base">Password</p>
+                <input
+                  type="password"
+                  placeholder="Enter password"
+                  value={password}
+                  className="bg-transparent outline-none placeholder:text-slate-600 w-full"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <p className="font-medium text-base ">Confirm password</p>
+                <input
+                  type="password"
+                  placeholder="Enter password again"
+                  value={confirmPassword}
+                  className="bg-transparent outline-none placeholder:text-slate-600 w-full"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={signUpWithEmailAndPassword}
+                  className="bg-slate-900 p-1 w-1/2  text-white rounded-md hover:bg-slate-800"
+                >
+                  {loading ? "Loading" : "Signup"}
+                </button>
+                <p className="font-medium text-lg m-3">or</p>
+                <button
+                  onClick={signUpWithGoogle}
+                  className="bg-slate-900 p-1 w-1/2 text-white rounded-md hover:bg-slate-800"
+                >
+                  {loading ? "Loading" : "SignUp with Google"}
+                </button>
+              </div>
+              <p className="text-center">
+                Already have an account ?{" "}
+                <span
+                  onClick={() => setHaveAnAccount(!haveAnAccount)}
+                  className="underline hover:text-slate-900 hover:cursor-pointer"
+                >
+                  Click Here
+                </span>
+              </p>
+            </form>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
