@@ -3,6 +3,7 @@ import { useState } from "react";
 import { auth } from "../config/firebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signInWithPopup } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -60,6 +61,27 @@ const Signup = () => {
       });
   };
 
+  const logIn = async (e) => {
+    e.preventDefault();
+
+    if (email && password) {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          navigator("/dashboard");
+          setEmail("");
+          setPassword("");
+          toast.success("Successfully logged in");
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          toast.error(errorMessage);
+        });
+    } else {
+      toast.error("All fields are mandatory");
+    }
+  };
+
   return (
     <div className="flex items-center justify-center h-[90vh]">
       {haveAnAccount ? (
@@ -91,7 +113,10 @@ const Signup = () => {
             </div>
 
             <div className="flex items-center justify-between">
-              <button className="bg-slate-900 p-1 w-full  text-white rounded-md hover:bg-slate-800">
+              <button
+                className="bg-slate-900 p-1 w-full  text-white rounded-md hover:bg-slate-800"
+                onClick={logIn}
+              >
                 LogIn
               </button>
             </div>
