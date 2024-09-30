@@ -5,6 +5,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signInWithPopup } from "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
+import { db } from "../config/firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -14,18 +16,23 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [haveAnAccount, setHaveAnAccount] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigator = useNavigate();
   const provider = new GoogleAuthProvider();
 
   const signUpWithEmailAndPassword = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (username && email && password && confirmPassword) {
       if (password === confirmPassword) {
         createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
             const user = userCredential.user;
-            toast.success("User created");
+            console.log(user);
+            toast.success("Authenticated");
+            setLoading(false);
+            addToDb(user);
             setConfirmPassword("");
             setEmail("");
             setPassword("");
@@ -35,50 +42,73 @@ const Signup = () => {
           .catch((error) => {
             const errorMessage = error.message;
             toast.error(errorMessage);
+            setLoading(false);
           });
       } else {
         toast.error("Password and confirm password do not match");
+        setLoading(false);
       }
     } else {
       toast.error("All fields are mandatory");
+      setLoading(false);
     }
   };
 
   const signUpWithGoogle = async (e) => {
     e.preventDefault();
+    setLoading(true);
     signInWithPopup(auth, provider)
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
         const user = result.user;
+        addToDb(user);
         console.log(user);
-        toast.success("user created");
+        setLoading(false);
+        toast.success("Authenticated");
         navigator("/dashboard");
       })
       .catch((error) => {
         const errorMessage = error.message;
         toast.error(errorMessage);
+        setLoading(false);
       });
   };
 
   const logIn = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     if (email && password) {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           const user = userCredential.user;
-          navigator("/dashboard");
+          setLoading(false);
           setEmail("");
           setPassword("");
           toast.success("Successfully logged in");
+          navigator("/dashboard");
         })
         .catch((error) => {
           const errorMessage = error.message;
           toast.error(errorMessage);
+          setLoading(false);
         });
     } else {
       toast.error("All fields are mandatory");
+      setLoading(false);
+    }
+  };
+
+  const addToDb = async (user) => {
+    try {
+      await setDoc(doc(db, "users", user.uid), {
+        Username: user.displayName ? user.displayName : username,
+        Email: user.email,
+        Photo: user.photoURL ? user.photoURL : null,
+      });
+      toast.success("Doc created");
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
@@ -105,7 +135,7 @@ const Signup = () => {
               <p className="font-medium text-base">Password</p>
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="Enter password"
                 value={password}
                 className="bg-transparent outline-none placeholder:text-slate-600 w-full"
                 onChange={(e) => setPassword(e.target.value)}
@@ -117,14 +147,14 @@ const Signup = () => {
                 className="bg-slate-900 p-1 w-1/2  text-white rounded-md hover:bg-slate-800"
                 onClick={logIn}
               >
-                LogIn
+                {loading ? "Loading" : "LogIn"}
               </button>
               <p className="font-medium text-lg m-3">or</p>
               <button
                 onClick={signUpWithGoogle}
                 className="bg-slate-900 p-1 w-1/2 text-white rounded-md hover:bg-slate-800"
               >
-                LogIn with Google
+                {loading ? "Loading" : "LogIn with Google"}
               </button>
             </div>
             <p className="text-center mt-2">
@@ -169,7 +199,7 @@ const Signup = () => {
               <p className="font-medium text-base">Password</p>
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="Enter password"
                 value={password}
                 className="bg-transparent outline-none placeholder:text-slate-600 w-full"
                 onChange={(e) => setPassword(e.target.value)}
@@ -179,7 +209,7 @@ const Signup = () => {
               <p className="font-medium text-base ">Confirm password</p>
               <input
                 type="password"
-                placeholder="Confirm password"
+                placeholder="Enter password again"
                 value={confirmPassword}
                 className="bg-transparent outline-none placeholder:text-slate-600 w-full"
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -190,14 +220,14 @@ const Signup = () => {
                 onClick={signUpWithEmailAndPassword}
                 className="bg-slate-900 p-1 w-1/2  text-white rounded-md hover:bg-slate-800"
               >
-                SignUp
+                {loading ? "Loading" : "Signup"}
               </button>
               <p className="font-medium text-lg m-3">or</p>
               <button
                 onClick={signUpWithGoogle}
                 className="bg-slate-900 p-1 w-1/2 text-white rounded-md hover:bg-slate-800"
               >
-                SignUp with Google
+                {loading ? "Loading" : "SignUp with Google"}
               </button>
             </div>
             <p className="text-center">
