@@ -108,12 +108,9 @@ const Signup = () => {
         await setDoc(doc(db, "users", user.uid), {
           Username: user.displayName ? user.displayName : username,
           Email: user.email,
-          Photo: user.photoURL ? user.photoURL : null,
           CreatedAt: new Date(),
         });
         toast.success("User profile created successfully!");
-      } else {
-        toast.error("user already exists");
       }
     } catch (error) {
       toast.error(error.message);
