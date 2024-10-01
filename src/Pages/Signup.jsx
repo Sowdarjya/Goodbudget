@@ -122,8 +122,8 @@ const Signup = () => {
       <Header />
       <div className="flex items-center justify-center h-[90vh]">
         {haveAnAccount ? (
-          <div className=" bg-[#d3d9d4] shadow-2xl shadow-[#212a31] w-[50%] rounded-lg p-6 h-[55%]">
-            <h2 className="text-center font-bold text-3xl m-3 text-[#212a31]">
+          <div className=" bg-[#d3d9d4] shadow-2xl shadow-[#212a31] w-[50%] rounded-lg p-6 h-[65%]">
+            <h2 className="text-center font-bold md:text-3xl text-xl m-3 text-[#212a31]">
               GoodBudget
             </h2>
 
@@ -149,9 +149,9 @@ const Signup = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between md:flex-row flex-col">
                 <button
-                  className="bg-slate-900 p-1 w-1/2  text-white rounded-md hover:bg-slate-800"
+                  className="bg-slate-900 p-1 md:w-1/2 w-full  text-white rounded-md hover:bg-slate-800"
                   onClick={logIn}
                 >
                   {loading ? "Loading" : "LogIn"}
@@ -159,7 +159,7 @@ const Signup = () => {
                 <p className="font-medium text-lg m-3">or</p>
                 <button
                   onClick={signUpWithGoogle}
-                  className="bg-slate-900 p-1 w-1/2 text-white rounded-md hover:bg-slate-800"
+                  className="bg-slate-900 p-1 md:w-1/2 w-full text-white rounded-md hover:bg-slate-800"
                 >
                   {loading ? "Loading" : "LogIn with Google"}
                 </button>
@@ -177,7 +177,7 @@ const Signup = () => {
           </div>
         ) : (
           <div className=" bg-[#d3d9d4] shadow-2xl shadow-[#212a31] w-[50%] rounded-lg p-6 h-5/6">
-            <h2 className="text-center font-bold text-3xl m-3 text-[#212a31]">
+            <h2 className="text-center font-bold md:text-3xl text-xl m-3 text-[#212a31]">
               GoodBudget
             </h2>
 
@@ -222,23 +222,23 @@ const Signup = () => {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between md:flex-row flex-col">
                 <button
                   onClick={signUpWithEmailAndPassword}
-                  className="bg-slate-900 p-1 w-1/2  text-white rounded-md hover:bg-slate-800"
+                  className="bg-slate-900 p-1 md:w-1/2 w-full   text-white rounded-md hover:bg-slate-800"
                 >
                   {loading ? "Loading" : "Signup"}
                 </button>
                 <p className="font-medium text-lg m-3">or</p>
                 <button
                   onClick={signUpWithGoogle}
-                  className="bg-slate-900 p-1 w-1/2 text-white rounded-md hover:bg-slate-800"
+                  className="bg-slate-900 p-1 md:w-1/2 w-full  text-white rounded-md hover:bg-slate-800"
                 >
                   {loading ? "Loading" : "SignUp with Google"}
                 </button>
               </div>
               <p className="text-center">
-                Already have an account ?{" "}
+                Already have an account ?
                 <span
                   onClick={() => setHaveAnAccount(!haveAnAccount)}
                   className="underline hover:text-slate-900 hover:cursor-pointer"
