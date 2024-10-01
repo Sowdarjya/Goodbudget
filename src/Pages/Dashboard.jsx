@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/Header/Header";
 import Card from "../components/Card";
 import { auth } from "../config/firebaseConfig";
-import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Modal from "../components/Modal/Modal";
@@ -10,6 +9,7 @@ import { onSnapshot } from "firebase/firestore";
 import { collection } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 import { query } from "firebase/firestore";
+import Transactions from "../components/Transactions/Transactions";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -20,7 +20,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     const user = auth.currentUser;
-    if (!user) return;
+    if (!user) {
+      navigate("/");
+      toast.error("SignUp first");
+    }
 
     const transactionsRef = collection(db, "users", user.uid, "transactions");
     const q = query(transactionsRef);
@@ -41,17 +44,6 @@ const Dashboard = () => {
     return unsubscribe();
   }, []);
 
-  const logOut = async () => {
-    signOut(auth)
-      .then(() => {
-        toast.success("Logged out");
-        navigate("/");
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
-  };
-
   const openModal = (type) => {
     setModalType(type);
     setIsModalVisible(true);
@@ -64,15 +56,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <Header />
-      <div className="px-4 pt-2 flex flex-col items-end">
-        <button
-          className="bg-[#d35e4f] p-2 rounded-md font-bold shadow-lg"
-          onClick={logOut}
-        >
-          Log Out
-        </button>
-      </div>
+      <Header isVisible={true} />
       <div className="flex flex-col items-center justify-around md:flex-row">
         <Card
           title="Total income"
@@ -93,6 +77,8 @@ const Dashboard = () => {
           onClick={() => openModal("expense")}
         />
       </div>
+      <br />
+      <Transactions />
       <Modal isVisible={isModalVisible} onClose={closeModal} type={modalType} />
     </div>
   );
