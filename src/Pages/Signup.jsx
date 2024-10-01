@@ -6,7 +6,7 @@ import { signInWithPopup } from "firebase/auth";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
 import { db } from "../config/firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header/Header";
@@ -100,12 +100,21 @@ const Signup = () => {
   };
 
   const addToDb = async (user) => {
+    const userDocRef = doc(db, "users", user.uid);
+    const userDoc = await getDoc(userDocRef);
+
     try {
-      await setDoc(doc(db, "users", user.uid), {
-        Username: user.displayName ? user.displayName : username,
-        Email: user.email,
-        Photo: user.photoURL ? user.photoURL : null,
-      });
+      if (!userDoc.exists()) {
+        await setDoc(doc(db, "users", user.uid), {
+          Username: user.displayName ? user.displayName : username,
+          Email: user.email,
+          Photo: user.photoURL ? user.photoURL : null,
+          CreatedAt: new Date(),
+        });
+        toast.success("User profile created successfully!");
+      } else {
+        toast.error("user already exists");
+      }
     } catch (error) {
       toast.error(error.message);
     }
