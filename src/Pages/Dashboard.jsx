@@ -61,13 +61,15 @@ const Dashboard = () => {
   return (
     <div>
       <Header isVisible={true} />
-      <h1 className="font-semibold mt-3 mx-4 text-xl text-[#d3d9d4]">
-        {" "}
-        Welcome,{" "}
-        <span className="text-[#f6b25a] uppercase">
-          {user.displayName}
-        </span>{" "}
-      </h1>
+      {user.displayName ? (
+        <h1 className="font-semibold mt-3 mx-4 text-xl text-[#d3d9d4]">
+          {" "}
+          Welcome,{" "}
+          <span className="text-[#f6b25a] uppercase">
+            {user.displayName}
+          </span>{" "}
+        </h1>
+      ) : null}
       <div className="flex flex-col items-center justify-around md:flex-row">
         <Card
           showBtn={true}

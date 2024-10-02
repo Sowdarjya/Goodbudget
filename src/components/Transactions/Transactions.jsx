@@ -1,4 +1,5 @@
 import React from "react";
+import { MdDeleteOutline } from "react-icons/md";
 
 const Transactions = () => {
   return (
@@ -11,7 +12,7 @@ const Transactions = () => {
           <p className="text-[#212a31] font-semibold">Date</p>
           <p className="text-[#212a31] font-semibold">Description</p>
           <p className="text-[#212a31] font-semibold">Amount</p>
-          <p className="text-[#212a31] font-semibold">Delete</p>
+          <MdDeleteOutline />
         </li>
       </ul>
     </div>
