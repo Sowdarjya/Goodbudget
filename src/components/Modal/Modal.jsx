@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { auth, db } from "../../config/firebaseConfig";
-import { addDoc } from "firebase/firestore";
+import { addDoc, serverTimestamp } from "firebase/firestore";
 import { collection } from "firebase/firestore";
 import { toast } from "react-toastify";
 
@@ -17,7 +17,7 @@ const Modal = ({ isVisible, onClose, type }) => {
           title,
           amount: Number(amount),
           type,
-          createdAt: new Date(),
+          createdAt: serverTimestamp(),
         });
 
         toast.success("Transaction added successfully");

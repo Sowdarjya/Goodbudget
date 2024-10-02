@@ -5,7 +5,7 @@ import { auth } from "../config/firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Modal from "../components/Modal/Modal";
-import { onSnapshot } from "firebase/firestore";
+import { getDocs, onSnapshot } from "firebase/firestore";
 import { collection } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 import { query } from "firebase/firestore";
@@ -17,8 +17,10 @@ const Dashboard = () => {
   const [modalType, setModalType] = useState("");
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
+  const [transactions, setTransactions] = useState([]);
 
   const user = auth.currentUser;
+
   useEffect(() => {
     if (!user) {
       navigate("/");

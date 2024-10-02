@@ -122,7 +122,7 @@ const Signup = () => {
       <Header />
       <div className="flex items-center justify-center h-[90vh]">
         {haveAnAccount ? (
-          <div className=" bg-[#d3d9d4] shadow-2xl shadow-[#212a31] w-[50%] rounded-lg p-6 h-[65%]">
+          <div className=" bg-[#d3d9d4] shadow-2xl shadow-[#212a31] md:w-[50%] w-[70%] rounded-lg p-6 h-[65%]">
             <h2 className="text-center font-bold md:text-3xl text-xl m-3 text-[#212a31]">
               GoodBudget
             </h2>
@@ -156,7 +156,7 @@ const Signup = () => {
                 >
                   {loading ? "Loading" : "LogIn"}
                 </button>
-                <p className="font-medium text-lg m-3">or</p>
+                <p className="font-medium text-lg md:m-3 m-0">or</p>
                 <button
                   onClick={signUpWithGoogle}
                   className="bg-slate-900 p-1 md:w-1/2 w-full text-white rounded-md hover:bg-slate-800"
@@ -176,7 +176,7 @@ const Signup = () => {
             </form>
           </div>
         ) : (
-          <div className=" bg-[#d3d9d4] shadow-2xl shadow-[#212a31] w-[50%] rounded-lg p-6 h-5/6">
+          <div className=" bg-[#d3d9d4] shadow-2xl shadow-[#212a31] md:w-[50%] w-[70%] rounded-lg p-6 h-5/6">
             <h2 className="text-center font-bold md:text-3xl text-xl m-3 text-[#212a31]">
               GoodBudget
             </h2>
@@ -229,7 +229,7 @@ const Signup = () => {
                 >
                   {loading ? "Loading" : "Signup"}
                 </button>
-                <p className="font-medium text-lg m-3">or</p>
+                <p className="font-medium text-lg md:m-3 m-0">or</p>
                 <button
                   onClick={signUpWithGoogle}
                   className="bg-slate-900 p-1 md:w-1/2 w-full  text-white rounded-md hover:bg-slate-800"
