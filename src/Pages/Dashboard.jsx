@@ -18,8 +18,8 @@ const Dashboard = () => {
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
 
+  const user = auth.currentUser;
   useEffect(() => {
-    const user = auth.currentUser;
     if (!user) {
       navigate("/");
       toast.error("SignUp first");
@@ -28,20 +28,24 @@ const Dashboard = () => {
     const transactionsRef = collection(db, "users", user.uid, "transactions");
     const q = query(transactionsRef);
 
-    const unsubscribe = () => {
-      onSnapshot(q, (querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          const transaction = doc.data();
-          if (transaction.type === "income") {
-            setTotalIncome(totalIncome + transaction.amount);
-          } else if (transaction.type === "expense") {
-            setTotalExpense(totalExpense + transaction.amount);
-          }
-        });
-      });
-    };
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      let incomeSum = 0;
+      let expenseSum = 0;
 
-    return unsubscribe();
+      querySnapshot.forEach((doc) => {
+        const transaction = doc.data();
+        if (transaction.type === "income") {
+          incomeSum += transaction.amount;
+        } else if (transaction.type === "expense") {
+          expenseSum += transaction.amount;
+        }
+      });
+
+      setTotalIncome(incomeSum);
+      setTotalExpense(expenseSum);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const openModal = (type) => {
@@ -57,8 +61,16 @@ const Dashboard = () => {
   return (
     <div>
       <Header isVisible={true} />
+      <h1 className="font-semibold mt-3 mx-4 text-xl text-[#d3d9d4]">
+        {" "}
+        Welcome,{" "}
+        <span className="text-[#f6b25a] uppercase">
+          {user.displayName}
+        </span>{" "}
+      </h1>
       <div className="flex flex-col items-center justify-around md:flex-row">
         <Card
+          showBtn={true}
           title="Total income"
           amount={totalIncome}
           buttonText="Add income"
@@ -71,6 +83,7 @@ const Dashboard = () => {
           onClick={() => openModal("reset")}
         />
         <Card
+          showBtn={true}
           title="Total Expense"
           amount={totalExpense}
           buttonText="Add expense"

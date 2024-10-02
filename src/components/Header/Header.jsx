@@ -2,8 +2,11 @@ import React from "react";
 import { auth } from "../../config/firebaseConfig";
 import { toast } from "react-toastify";
 import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const Header = ({ isVisible }) => {
+  const navigate = useNavigate();
+
   const logOut = async () => {
     signOut(auth)
       .then(() => {

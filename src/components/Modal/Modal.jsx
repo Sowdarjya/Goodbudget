@@ -86,8 +86,11 @@ const Modal = ({ isVisible, onClose, type }) => {
             <button className="bg-[#212a31] hover:bg-[#29343c] p-2 text-[#d3d9d4] rounded-lg w-[45%] mr-1">
               Yes
             </button>
-            <button className="bg-[#212a31] hover:bg-[#29343c] p-2 text-[#d3d9d4] rounded-lg w-[45%]">
-              No
+            <button
+              className="bg-[#212a31] hover:bg-[#29343c] p-2 text-[#d3d9d4] rounded-lg w-[45%]"
+              onClick={onClose}
+            >
+              Close
             </button>
           </div>
         </div>
