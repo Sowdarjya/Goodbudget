@@ -36,7 +36,6 @@ const Transactions = () => {
   const formatDate = (timestamp) => {
     if (!timestamp) return "";
 
-    // If using Firestore Timestamp
     if (timestamp.toDate) {
       return timestamp.toDate().toLocaleString();
     }
@@ -45,43 +44,45 @@ const Transactions = () => {
   };
 
   return (
-    <div className="p-2">
+    <div className="p-10">
       <h2 className="p-2 bg-[#212a31] text-[#d3d9d4] font-semibold text-center rounded-lg text-2xl uppercase">
         History
       </h2>
       <div className="flex items-center justify-around bg-[#a9abaa] mt-2 p-2 rounded-lg shadow-2xl w-full">
-        <p className="text-[#212a31] font-bold text-xl uppercase w-1/4 text-center">
+        <p className="text-[#212a31] font-bold md:text-[1rem] text-xs uppercase w-1/4 text-center">
           Date & time
         </p>
-        <p className="text-[#212a31] font-bold text-xl uppercase w-1/4 text-center">
+        <p className="text-[#212a31] font-bold md:text-[1rem] text-xs uppercase w-1/4 text-center">
           Type
         </p>
-        <p className="text-[#212a31] font-bold text-xl uppercase w-1/4 text-center">
+        <p className="text-[#212a31] font-bold md:text-[1rem] text-xs uppercase w-1/4 text-center">
           Description
         </p>
-        <p className="text-[#212a31] font-bold text-xl uppercase w-1/4 text-center">
+        <p className="text-[#212a31] font-bold md:text-[1rem] text-xs uppercase w-1/4 text-center">
           Amount
         </p>
-        <p className="text-[#212a31] font-semibold w-1/4 text-center">{""}</p>
       </div>
       <ul className=" flex flex-col items-center">
         {transactions.map((transaction) => (
-          <li className="flex items-center justify-around bg-[#d3d9d4] mt-2 p-2 rounded-lg shadow-2xl w-full">
-            <p className="text-[#212a31] font-bold w-1/4 text-center">
+          <li className="flex items-center justify-around bg-[#d3d9d4] mt-2 p-3 rounded-lg shadow-2xl w-full">
+            <p className="text-[#212a31] font-bold w-1/4 text-center md:text-[1rem] text-xs">
               {formatDate(transaction.createdAt)}
-            </p>
-            <p className="text-[#212a31] font-bold w-1/4 text-center">
+            </p>{" "}
+            <p className="text-[#212a31] font-bold w-1/4 text-center md:text-[1rem] text-xs capitalize">
               {transaction.type}
             </p>
-            <p className="text-[#212a31] font-bold w-1/4 text-center">
+            <p className="text-[#212a31] font-bold w-1/4 text-center md:text-[1rem] text-xs">
               {transaction.title}
             </p>
-            <p className="text-[#212a31] font-bold w-1/4 text-center">
-              {transaction.amount}
-            </p>
-            <button className="text-xl text-red-600 w-1/4 text-center flex items-center justify-center">
-              <MdDeleteOutline />
-            </button>
+            {transaction.type === "expense" ? (
+              <p className="text-[#bd3c3c] font-bold w-1/4 text-center md:text-[1rem] text-xs">
+                -${transaction.amount}
+              </p>
+            ) : (
+              <p className="text-[#41c932] font-bold w-1/4 text-center md:text-[1rem] text-xs">
+                +${transaction.amount}
+              </p>
+            )}
           </li>
         ))}
       </ul>
