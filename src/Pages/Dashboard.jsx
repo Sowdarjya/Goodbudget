@@ -4,45 +4,72 @@ import Card from "../components/Card";
 import { auth } from "../config/firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import Modal from "../components/Modal/Modal";
-import { onSnapshot, collection, query } from "firebase/firestore";
+import { onSnapshot, collection, query, doc, getDoc } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
 import Transactions from "../components/Transactions/Transactions";
-import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalInfo, setModalInfo] = useState("");
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
-  const user = auth.currentUser;
+  const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(true);
   const navigator = useNavigate();
 
   useEffect(() => {
-    if (!user) {
-      navigator("/");
-    }
+    let unsubscribeSnapshot = null;
 
-    const transactionRef = collection(db, "users", user.uid, "transactions");
-    const q = query(transactionRef);
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      let income = 0;
-      let expense = 0;
+    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        navigator("/");
+        return;
+      }
 
-      querySnapshot.forEach((doc) => {
-        const transaction = doc.data();
-        if (transaction.type === "income") {
-          income += transaction.amount;
-        } else if (transaction.type === "expense") {
-          expense += transaction.amount;
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setUsername(userData.Username || "User");
         }
-      });
 
-      setTotalIncome(income);
-      setTotalExpense(expense);
+        const transactionRef = collection(
+          db,
+          "users",
+          user.uid,
+          "transactions"
+        );
+        const q = query(transactionRef);
+        unsubscribeSnapshot = onSnapshot(q, (querySnapshot) => {
+          let income = 0;
+          let expense = 0;
+
+          querySnapshot.forEach((doc) => {
+            const transaction = doc.data();
+            if (transaction.type === "income") {
+              income += transaction.amount;
+            } else if (transaction.type === "expense") {
+              expense += transaction.amount;
+            }
+          });
+
+          setTotalIncome(income);
+          setTotalExpense(expense);
+          setLoading(false);
+        });
+      } catch (error) {
+        console.error("Error setting up dashboard:", error);
+        setLoading(false);
+      }
     });
 
-    return () => unsubscribe();
-  }, []);
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeSnapshot) unsubscribeSnapshot();
+    };
+  }, [navigator]);
 
   const showModal = (type) => {
     setModalInfo(type);
@@ -54,12 +81,19 @@ const Dashboard = () => {
     setIsModalVisible(false);
   };
 
+  if (loading || !auth.currentUser) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className="text-2xl text-[#d3d9d4]">Loading...</div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <Header isVisible={true} />
       <h1 className="text-2xl px-4 font-medium text-[#d3d9d4]">
-        Welcome,{" "}
-        <span className="uppercase text-[#faa153]">{user?.displayName}</span>{" "}
+        Welcome, <span className="uppercase text-[#faa153]">{username}</span>{" "}
       </h1>
       <div className="flex flex-col md:flex-row px-4 items-center">
         <Card
