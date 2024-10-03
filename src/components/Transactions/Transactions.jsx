@@ -44,7 +44,7 @@ const Transactions = () => {
   };
 
   return (
-    <div className="p-10">
+    <div className="p-2">
       <h2 className="p-2 bg-[#212a31] text-[#d3d9d4] font-semibold text-center rounded-lg text-2xl uppercase">
         History
       </h2>
