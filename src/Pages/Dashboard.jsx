@@ -8,6 +8,7 @@ import { onSnapshot, collection, query, doc, getDoc } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import Transactions from "../components/Transactions/Transactions";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -60,7 +61,7 @@ const Dashboard = () => {
           setLoading(false);
         });
       } catch (error) {
-        console.error("Error setting up dashboard:", error);
+        toast.error("Error setting up dashboard");
         setLoading(false);
       }
     });

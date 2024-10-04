@@ -61,9 +61,23 @@ const Transactions = () => {
 
   return (
     <div className="flex justify-center mt-4 flex-col items-center">
-      <h1 className="text-2xl font-medium bg-[#212a31] text-[#d3d9d4] w-[90%] text-center font-semibold uppercase rounded-2xl p-3 mb-4">
+      <h1 className="text-2xl bg-[#212a31] text-[#d3d9d4] w-[90%] md:w-[80%] text-center font-semibold uppercase rounded-2xl p-3 mb-4">
         History
       </h1>
+      <div className="flex justify-around items-center bg-[#66696a] w-[90%] md:w-[70%] mb-3 p-3 rounded-lg">
+        <p className="font-bold md:text-[1rem] text-[0.8rem] text-[#d3d9d4] uppercase text-center w-1/4">
+          Date & Time
+        </p>
+        <p className="font-bold md:text-[1rem] text-[0.8rem] text-[#d3d9d4] uppercase text-center w-1/4">
+          Type
+        </p>
+        <p className="font-bold md:text-[1rem] text-[0.8rem] text-[#d3d9d4] uppercase text-center w-1/4">
+          Description
+        </p>
+        <p className="font-bold md:text-[1rem] text-[0.8rem] text-[#d3d9d4] uppercase text-center w-1/4">
+          Amount
+        </p>
+      </div>
       {transactions.length === 0 ? (
         <p className="text-[#d3d9d4]">No transactions found.</p>
       ) : (
@@ -71,17 +85,23 @@ const Transactions = () => {
           {transactions.map((transaction) => (
             <li
               key={transaction.id}
-              className="flex justify-around w-full items-center bg-[#d3d9d4] p-3 rounded-lg"
+              className="flex justify-around w-full items-center bg-[#d3d9d4] p-3 rounded-lg shadow-2xl"
             >
-              <p>{formatDate(transaction.createdAt)}</p>
-              <p>{transaction.type}</p>
-              <p>{transaction.title}</p>
+              <p className="w-1/4 font-semibold text-center capitalize md:text-[1rem] text-[0.6rem]">
+                {formatDate(transaction.createdAt)}
+              </p>
+              <p className="w-1/4 font-semibold text-center capitalize md:text-[1rem] text-[0.6rem]">
+                {transaction.type}
+              </p>
+              <p className="w-1/4 font-semibold text-center capitalize md:text-[1rem] text-[0.6rem]">
+                {transaction.title}
+              </p>
               {transaction.type === "expense" ? (
-                <p className="text-[#bd3c3c] font-bold w-1/4 text-center md:text-[1rem] text-xs">
+                <p className="text-[#bd3c3c] font-bold w-1/4 text-center md:text-[1rem] text-[0.6rem]">
                   -${transaction.amount}
                 </p>
               ) : (
-                <p className="text-[#41c932] font-bold w-1/4 text-center md:text-[1rem] text-xs">
+                <p className="text-[#41c932] font-bold w-1/4 text-center md:text-[1rem] text-[0.6rem]">
                   +${transaction.amount}
                 </p>
               )}
